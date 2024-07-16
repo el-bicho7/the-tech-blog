@@ -2,6 +2,18 @@ const router = require('express').Router();
 // Import the User model from the models folder
 const { User } = require('../../models');
 
+
+router.get('/', async (req, res) => {
+  try {
+    const users = await User.findAll();
+
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+})
+
+
 // If a POST request is made to /api/users, a new user is created. The user id and logged in state is saved to the session within the request object.
 router.post('/', async (req, res) => {
   try {

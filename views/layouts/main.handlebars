@@ -7,6 +7,18 @@
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+  <div class="navbar">
+    <a href="/">Home</a>
+    <a href="/dashboard">Dashboard</a>
+    {{#if logged_in}}
+    <a id="logout">Logout</a>
+    {{else}}
+    <a href="/login" >Login</a>
+    {{/if}}
+  </div>
+  <div class="title">
+    <h1>The Tech Blog</h1>
+  </div>
   {{{ body }}}
 </body>
 </html>

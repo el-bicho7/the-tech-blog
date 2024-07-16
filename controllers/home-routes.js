@@ -2,22 +2,19 @@ const router = require('express').Router();
 const { Posts, User } = require('../models');
 const withAuth = require('../utils/auth');
 
-// GET login route
 
-
-router.get('/', withAuth, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const userData = await User.findByPk(req.session.user_id, {
-      attributes: { exclude: ['password'] },
-      include: [{ model: Posts }],
+    const postData = await Posts.findAll({
+      include: {
+        model: User,
+        attributes: ['name']
+      }
     });
 
-    const user = userData.get({ plain: true });
+    const posts = postData.map(post => post.get({ plain: true}));
 
-    res.render('homepage', {
-      user,
-      logged_in: req.session.logged_in,
-    });
+    res.render('homepage', {posts});
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
