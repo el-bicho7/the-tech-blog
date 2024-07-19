@@ -1,0 +1,14 @@
+<div class="container">
+  {{#each posts}}
+  <div class="post" data-id="{{id}}">
+    <a href="/update-post/{{id}}">
+    <h2>{{title}}</h2>
+    </a>
+    <div class="author-date">{{date}}</div>
+  </div>
+  {{/each}}
+  <div class="footer">
+    <a href="/new-post">+New Post</a>
+  </div>
+</div>
+
