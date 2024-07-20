@@ -55,11 +55,11 @@ router.get('/dashboard', withAuth, async (req, res) => {
   }
 });
 
-router.get('/new-post', async (req, res) => {
+router.get('/new-post', withAuth, async (req, res) => {
   res.render('new-post');
 });
 
-router.get('/update-post/:id', async (req, res) => {
+router.get('/update-post/:id', withAuth, async (req, res) => {
   try {
     const postId = await Posts.findOne({
       where: { id: req.params.id }
@@ -73,7 +73,7 @@ router.get('/update-post/:id', async (req, res) => {
   }
 });
 
-router.get('/:id/comment', async (req, res) => {
+router.get('/:id/comment', withAuth, async (req, res) => {
   try {
     const postData = await Posts.findOne({
       where: { id: req.params.id },

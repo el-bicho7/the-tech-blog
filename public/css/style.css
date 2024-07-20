@@ -15,6 +15,9 @@ h1, h2, p {
   padding: 0;
 }
 
+#signin-link{
+  color:#2e8531;
+}
 /* Navbar Styles */
 .navbar {
   background-color: #4CAF50; /* Green */
