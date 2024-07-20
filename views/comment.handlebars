@@ -1,20 +1,25 @@
 <div class="container">
-  <div class="post" data-id="{{id}}">
-    <h2>{{post.title}}</h2>
-    <div class="author-date">{{date}}</div>
+  <div class="post" id="title" data-id="{{comments.id}}">
+    <h2>{{comments.title}}</h2>
+    <p>{{comments.content}}</p>
+    <p>{{comments.user.name}}</p>
+    <div class="author-date">{{comments.date}}</div>
   </div>
   <div>
     <form id="comment-post-form">
-    <div class="form-group">
-      <label for="title">Title:</label>
-      <input type="text" id="title" name="title" required>
-    </div>
-    <div class="form-group">
-      <label for="content">Content:</label>
-      <textarea id="content" name="content" rows="4" required></textarea>
-    </div>
-    <button type="submit">Create Comment</button>
+      <div class="form-group">
+        <label for="content">Content:</label>
+        <textarea id="content" name="content" rows="4" required></textarea>
+      </div>
+      <button type="submit">Create Comment</button>
   </form>
   </div>
+  {{#each comments.comments}}
+  <div class="post" id="comments">
+    <p>{{this.content}}</p>
+    <p>{{this.user.name}}, {{this.date}}</p>
+  </div>
+  {{/each}}
 </div>
 
+<script src="/js/comments.js"></script>

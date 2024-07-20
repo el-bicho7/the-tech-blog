@@ -1,6 +1,6 @@
 const router = require('express').Router();
 // Import models
-const { Posts, User} = require('../../models');
+const { Posts, User, Comments } = require('../../models');
 const withAuth = require('../../utils/auth');
 
 
@@ -14,22 +14,60 @@ router.get('/', async (req, res) => {
   }
 });
 
-//Add withAuth so only logged in users can post
+router.get('/:id', withAuth, async (req, res) => {
+  try {
+    const comments = await Posts.findOne({
+      where: { user_id: req.params.id },
+      include: [ User, Comments ]
+    });
+
+    res.status(200).json(comments);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 router.post('/', withAuth, async (req, res) => {
-  console.log(req.body);
+  
   try {
     const newPost = await Posts.create({
       ...req.body, 
       user_id: req.session.user_id,
     })
-    console.log(newPost);
+    
     res.status(200).json(newPost);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.get('/:id/comments', withAuth, async (req, res) => {
+  try {
+    const comments = await Comments.findAll({
+      where: { posts_id: req.params.id }
+    });
+
+    res.status(200).json(comments);
+  } catch (err) {
+    res.status(500).json(err)
+  }
+});
+
+router.post('/:id/comments', withAuth, async (req, res) => {
+  try {
+    const newComment = await Comments.create({
+      ...req.body,
+      user_id: req.session.user_id,
+      posts_id: req.params.id
+    });
+
+    res.status(200).json(newComment);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.put('/:id', withAuth, async (req, res) => {
   try {
     const post = await Posts.update(
       {
@@ -49,7 +87,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', withAuth, async (req, res) => {
   try {
     const transactionData = await Posts.destroy({
       where: {

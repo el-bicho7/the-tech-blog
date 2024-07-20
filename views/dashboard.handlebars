@@ -1,4 +1,6 @@
+<h1 class="title">Your Dashboard</h1>
 <div class="container">
+  {{#if hasPost}}
   {{#each posts}}
   <div class="post" data-id="{{id}}">
     <a href="/update-post/{{id}}">
@@ -7,6 +9,7 @@
     <div class="author-date">{{date}}</div>
   </div>
   {{/each}}
+  {{/if}}
   <div class="footer">
     <a href="/new-post">+New Post</a>
   </div>

@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Posts, User } = require('../models');
+const { Posts, User, Comments } = require('../models');
 const withAuth = require('../utils/auth');
 
 
@@ -37,18 +37,20 @@ router.get('/dashboard', withAuth, async (req, res) => {
         attributes: ['name'],
       }],
     });
-    
+   
     const userPost = postData.map(posts => {
       const plainPost = posts.get({ plain: true});
       plainPost.date = new Date(plainPost.date).toLocaleDateString('en-US');
       return plainPost;
     });
-
+    
     res.render('dashboard', {
       posts: userPost,
+      hasPost: userPost.length > 0,
       logged_in: req.session.logged_in,
     });
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
@@ -73,16 +75,32 @@ router.get('/update-post/:id', async (req, res) => {
 
 router.get('/:id/comment', async (req, res) => {
   try {
-    const postId = await Posts.findByPk({
-      where: { id: req.params.id }
+    const postData = await Posts.findOne({
+      where: { id: req.params.id },
+      include: [
+        { 
+          model: User, 
+          attributes: ['name'],
+        }, 
+        {
+          model: Comments, 
+          include:[{
+            model: User,
+            attributes: ['name'],
+          }]
+        }
+      ]
     });
 
-    const posts = postId.get({ plain: true });
-    res.render('comment', {posts})
+    const comments = postData.get({ plain: true });
+    res.render('comment', {
+      comments,
+      logged_in: req.session.logged_in,
+    })
   } catch (err) {
     res.status(500).json(err);
   }
-})
+});
 
 router.get('/login', (req, res) => {
   // If the user is already logged in, redirect the request to another route
