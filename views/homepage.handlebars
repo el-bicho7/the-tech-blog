@@ -2,7 +2,7 @@
 <div class="container">
   {{#each posts}} 
   <div class="post">
-    <a href="/{{this.id}}/comment">
+    <a class="text" href="/{{this.id}}/comment">
     <h2>{{this.title}}</h2>
     <div class="author-date">By {{this.user.name}} on {{this.date}}</div>
     <p>{{this.content}}</p>
